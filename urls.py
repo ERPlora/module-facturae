@@ -7,6 +7,10 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard, name='dashboard'),
 
+    # Navigation tab aliases
+    path('invoices/', views.facturae_invoices_list, name='invoices'),
+
+
     # FacturaeInvoice
     path('facturae_invoices/', views.facturae_invoices_list, name='facturae_invoices_list'),
     path('facturae_invoices/add/', views.facturae_invoice_add, name='facturae_invoice_add'),
