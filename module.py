@@ -28,3 +28,15 @@ PERMISSIONS = [
 'facturae.submit_facturae',
 'facturae.manage_settings',
 ]
+
+ROLE_PERMISSIONS = {
+    "admin": ["*"],
+    "manager": [
+        "generate_facturae",
+        "submit_facturae",
+        "view_facturaeinvoice",
+    ],
+    "employee": [
+        "view_facturaeinvoice",
+    ],
+}
