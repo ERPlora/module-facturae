@@ -3,6 +3,8 @@ Facturae (Spain) Module Views
 """
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
+from django.http import HttpResponse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render as django_render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -113,6 +115,7 @@ def facturae_invoices_list(request):
     }
 
 @login_required
+@htmx_view('facturae/pages/facturae_invoice_add.html', 'facturae/partials/facturae_invoice_add_content.html')
 def facturae_invoice_add(request):
     hub_id = request.session.get('hub_id')
     if request.method == 'POST':
@@ -134,10 +137,13 @@ def facturae_invoice_add(request):
         obj.submitted_at = submitted_at
         obj.response_code = response_code
         obj.save()
-        return _render_facturae_invoices_list(request, hub_id)
-    return django_render(request, 'facturae/partials/panel_facturae_invoice_add.html', {})
+        response = HttpResponse(status=204)
+        response['HX-Redirect'] = reverse('facturae:facturae_invoices_list')
+        return response
+    return {}
 
 @login_required
+@htmx_view('facturae/pages/facturae_invoice_edit.html', 'facturae/partials/facturae_invoice_edit_content.html')
 def facturae_invoice_edit(request, pk):
     hub_id = request.session.get('hub_id')
     obj = get_object_or_404(FacturaeInvoice, pk=pk, hub_id=hub_id, is_deleted=False)
@@ -152,7 +158,7 @@ def facturae_invoice_edit(request, pk):
         obj.response_code = request.POST.get('response_code', '').strip()
         obj.save()
         return _render_facturae_invoices_list(request, hub_id)
-    return django_render(request, 'facturae/partials/panel_facturae_invoice_edit.html', {'obj': obj})
+    return {'obj': obj}
 
 @login_required
 @require_POST

@@ -1,0 +1,77 @@
+{% load djicons i18n %}
+<div data-back-url="{% url 'facturae:facturae_invoices_list' %}" hidden></div>
+
+<div class="p-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">{% trans "Edit Facturaeinvoice" %}</h1>
+        <div class="flex gap-2">
+            <a class="btn btn-ghost btn-sm"
+               hx-get="{% url 'facturae:facturae_invoices_list' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" form="edit-facturae_invoice-form" class="btn btn-sm color-primary">
+                {% icon "checkmark-outline" %}
+                {% trans "Save" %}
+            </button>
+        </div>
+    </div>
+
+        {% if error %}
+        <div class="callout callout-error">
+            <div class="callout-content"><span class="callout-text">{{ error }}</span></div>
+        </div>
+        {% endif %}
+    <!-- Form -->
+    <form id="edit-facturae_invoice-form"
+          hx-post="{% url 'facturae:facturae_invoice_edit' obj.id %}" class="max-w-2xl">
+        {% csrf_token %}
+        <div class="card mb-4">
+            <div class="card-body flex flex-col gap-4">
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Invoice Number" %}</label>
+                <input type="text" name="invoice_number" class="input input-sm w-full" value="{{ obj.invoice_number }}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Recipient Name" %}</label>
+                <input type="text" name="recipient_name" class="input input-sm w-full" value="{{ obj.recipient_name }}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Recipient Tax Id" %}</label>
+                <input type="text" name="recipient_tax_id" class="input input-sm w-full" value="{{ obj.recipient_tax_id }}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Total Amount" %}</label>
+                <input type="number" name="total_amount" class="input input-sm w-full" step="0.01" value="{{ obj.total_amount }}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Status" %}</label>
+                <select name="status" class="select select-sm w-full">
+                <option value="">---</option>
+                </select>
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Xml Generated At" %}</label>
+                <input type="datetime-local" name="xml_generated_at" class="input input-sm w-full" value="{{ obj.xml_generated_at }}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Submitted At" %}</label>
+                <input type="datetime-local" name="submitted_at" class="input input-sm w-full" value="{{ obj.submitted_at }}">
+                </div>
+
+                <div>
+                <label class="text-sm font-medium mb-1 block">{% trans "Response Code" %}</label>
+                <input type="text" name="response_code" class="input input-sm w-full" value="{{ obj.response_code }}">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
